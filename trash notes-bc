@@ -1,0 +1,39 @@
+vball=read.csv("clean_data.csv")
+
+
+ball = read.table("clean_data.csv", check.names = F, header = TRUE, sep = ",", row.names = 
+1)
+
+view(vball)
+str(vball)
+vball$position_number
+nunique(vball)
+?nunique()
+
+View(ball)
+str(ball)
+
+#what you think most taller get higher spike
+plot(vball$height,vball$spike)
+ggplot(data=vball,aes(x=height,y=spike))+geom_point()
+#212 missing spike
+ggplot(data=vball,aes(x=height,y=spike))+geom_text(aes(label=name))
+
+#try to make what hight for position
+ggplot(vball,aes(x = height, fill = position_number))+geom_bar(position = "dodge")
+ggplot(vball,aes(x =position_number , fill = height ))+geom_bar()
+
+
+
+
+
+ggplot(data=vball)+geom_point(aes(x=height,y=spike))
+head(vball)
+
+
+boxplot(formula = height ~ position_number, data = vball ,ylab = 'height')
+
+
+boxplot(formula = height ~ country, data = vball ,ylab = 'height')
+
+?boxplot
