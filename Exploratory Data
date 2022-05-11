@@ -72,3 +72,17 @@ positions.c.19
 
 positions.c.23 = table(country23$position_number)
 positions.c.23
+
+
+
+### bar graphs of the countries 
+
+vball$country = as.factor(vball$country)
+str(vball)
+vball$position_number= as.factor(vball$position_number)
+
+ggplot(data=vball, aes(x=position_number, y=height, color=country)) + 
+  geom_point()
+
+ggplot(vball, aes(x=country, fill= position_number)) + 
+  geom_bar(position = "dodge") 
