@@ -37,3 +37,22 @@ boxplot(formula = height ~ position_number, data = vball ,ylab = 'height')
 boxplot(formula = height ~ country, data = vball ,ylab = 'height')
 
 ?boxplot
+
+
+#first try adding color
+ggplot(data=vball)+geom_point(aes(x=country,y=position_number))
+
+ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=position_number))
+
+country
+
+('position_number')+mean()
+
+?group_by
+
+vball$position_number
+
+
+dplyr
+
+vball position_number
