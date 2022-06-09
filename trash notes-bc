@@ -1,48 +1,105 @@
+
+install.packages("ggplot2")
+install.packages("dplyr")
+getwd()
+setwd("C:/Users/puppy/desktop/data")
+list.files()
+library("ggplot2")
+
 vball=read.csv("clean_data.csv")
 
 
-ball = read.table("clean_data.csv", check.names = F, header = TRUE, sep = ",", row.names = 
-1)
+vball$country = as.factor(vball$country)
+str(vball)
+vball$position_number= as.factor(vball$position_number)
+
+
 
 view(vball)
 str(vball)
 vball$position_number
-nunique(vball)
-?nunique()
 
-View(ball)
-str(ball)
 
 #what you think most taller get higher spike
 plot(vball$height,vball$spike)
 ggplot(data=vball,aes(x=height,y=spike))+geom_point()
-#212 missing spike
-ggplot(data=vball,aes(x=height,y=spike))+geom_text(aes(label=name))
+
+#212 missing spike [dont use]
+ggplot(data=vball_zero,aes(x=height,y=spike))+geom_text(aes(label=name))
 
 #try to make what hight for position
 ggplot(vball,aes(x = height, fill = position_number))+geom_bar(position = "dodge")
+
 ggplot(vball,aes(x =position_number , fill = height ))+geom_bar()
 
 
+boxplot(formula = spike ~ position_number, data = vball ,ylab = 'spike',outline=FALSE)
 
-
-
-ggplot(data=vball)+geom_point(aes(x=height,y=spike))
-head(vball)
-
+boxplot(formula = block ~ position_number, data = vball ,ylab = 'block',outline=FALSE)
 
 boxplot(formula = height ~ position_number, data = vball ,ylab = 'height')
 
-
 boxplot(formula = height ~ country, data = vball ,ylab = 'height')
 
-?boxplot
 
 
-#first try adding color
-ggplot(data=vball)+geom_point(aes(x=country,y=position_number))
+ggplot(vball,aes(x=country,y=height))+geom_boxplot()
+ggplot(vball,aes(x = position_number, fill = height))+geom_bar()
+
+
+##t test for position spike and hight explaine remove 
+
+
+ggplot(data=vball)+geom_point(aes(x=height,y=spike))
 
 ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=position_number))
+
+head(vball)
+
+ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=position_number))
+
+ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=position_number))+scale_color_hue(l=60, c=90)
+
+
+#body type they want for position?
+boxplot(formula = weight ~ position_number, data = vball ,ylab = 'weight')
+
+
+
+
+
+#today 
+outline false
+
+
+
+lr3 = lm(formula = spike ~ position_number, data = vball)
+
+S_vs_P=aov(data=vball,spike ~ position_number)
+
+summary(S_vs_P)
+
+anova(lr3)
+
+t.test.lr3 = t.test(x = vball$position_number, y = vball$spike, alternative = "two.sided",
+                    paired = FALSE, var.equal = TRUE)
+
+
+
+
+
+#doesnt work
+ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=position_number))+scale_color_gradientn(colours = rainbow(6))
+ggplot(data=vball)+geom_point(aes(x=height,y=spike,color=country))+scale_color_gradientn(colours = rainbow(31))
+ggplot(data=vball)+geom_point(aes(x=position_number, y=country,))
+
+rlang::last_error()+geom_text(aes(label=country))
+
+ggplot(data=vball)+geom_bar(aes(x=position_number, fill=country,))
+
+data.frame(position_number = as.factor(c(1,2,3,4,6))
+
+data.frame(vball$position_number)
 
 country
 
@@ -56,3 +113,48 @@ vball$position_number
 dplyr
 
 vball position_number
+
++color=position_number
+
+
+# Remove zero-rows tries
+
+outline false
+
+vball$spike = as.numeric(vball$spike)
+vball$block=as.numeric(vball$block)
+
+
+vball_zero <- vball[apply(vball, c(1), function(row) all(row !=0 )), ]  
+
+vball_zero <- vball$spike[apply(vball, 1, function(row) all(row !=0 )), ]  
+
+vball_zero
+
+?dim(X)
+?apply
+
+str(vball_zero)
+
+nzerovball <- vball[ vball != 0 ]
+
+
+
+str(nzerovball)
+head(nzerovball)
+
+str(vball)
+
+vball_zero <- data.frame(vball)
+
+
+data <- data.frame(x1 = 5:0,                                      # Create example data
+                   x2 = c(3, 1, 0, 2, 2, 7),
+                   x3 = 5,
+                   x4 = c(9, 0, 9, 9, 9, 0))
+                   
+data_zero <- data[apply(data, c(1,2,3,4,5,6,7,8,9), function(row) all(row !=0 )), ]  
+
+data_zero  
+
+
