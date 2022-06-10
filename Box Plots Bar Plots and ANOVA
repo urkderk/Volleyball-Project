@@ -1,0 +1,110 @@
+setwd()
+list.files()
+vball = read.table('clean_data.csv', header = TRUE, sep = ',')
+vball
+str(vball)
+library("ggplot2")
+
+vball <- vball[-c(69),]
+vball <- na.omit(vball)
+vball$country = as.factor(vball$country)
+vball$position_number= as.factor(vball$position_number)
+
+
+
+## so we know that block & spike are always going to be higher than height, so we need to compare if height is asscocated with positions
+
+boxplot(height ~ position_number, data = vball, outline=FALSE,
+        main="Height vs. Position Number", xlab="Position Number",  ylab="Height")
+
+boxplot(spike ~ position_number, data = vball, outline=FALSE,
+        main="Spike vs. Position Number", xlab="Position Number",  ylab="Spike")
+
+boxplot(block ~ position_number, data = vball, outline=FALSE,
+        main="Block vs. Position Number", xlab="Position Number",  ylab="Block")
+
+
+## middle blockers (position 3) are typically the tallest on the team position 6 is the shortest
+    ##t-test to see if this is true
+
+p.vs.height = aov(height ~ position_number, data = vball)
+summary(p.vs.height)
+
+p.vs.spike = aov(spike ~ position_number, data = vball)
+summary(p.vs.spike)
+
+p.vs.block = aov(block ~ position_number, data = vball)
+summary(p.vs.block)
+
+####“true difference in means is not equal to 0” = there is a statistical difference between the two means.
+##we can REJECT the null hypo and accept the alternative hypothesis that there is a statistical difference between the two means.
+
+### null hypothesis = no difference among group means
+ # p-value < alpha value = null hypo REJECTED 
+
+##independent variables are on x-axis and dependent on y-axis 
+## If the p-value for F statistics Pr(>F) is less than our significance level, we reject the null hypothesis.
+
+
+### t-test btwn specific positions height, first need to subset the data 
+
+position1 = subset(vball, position_number == 1)
+position2 = subset(vball, position_number == 2)
+position3 = subset(vball, position_number == 3)
+position4 = subset(vball, position_number == 4)
+position6 = subset(vball, position_number == 6)
+
+
+t.test.3.vs.1 = t.test(x = position3$height, y = position1$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.3.vs.1
+
+t.test.3.vs.2 = t.test(x = position3$height, y = position2$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.3.vs.2
+
+t.test.3.vs.4 = t.test(x = position3$height, y = position4$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.3.vs.4
+
+t.test.3.vs.6 = t.test(x = position3$height, y = position6$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.3.vs.6
+
+
+t.test.6.vs.1 = t.test(x = position6$height, y = position1$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.6.vs.1
+
+t.test.6.vs.2 = t.test(x = position6$height, y = position2$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.6.vs.2
+
+t.test.6.vs.4 = t.test(x = position6$height, y = position4$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.6.vs.4
+
+
+t.test.1.vs.2 = t.test(x = position1$height, y = position2$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.1.vs.2
+
+t.test.1.vs.4 = t.test(x = position1$height, y = position4$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.1.vs.4 
+
+t.test.1.vs.6 = t.test(x = position1$height, y = position2$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.1.vs.6
+
+
+t.test.2.vs.4 = t.test(x = position2$height, y = position4$height, alternative = "two.sided",
+                       paired = FALSE, var.equal = TRUE)
+t.test.2.vs.4
+
+
+## what is the strategy for countries when looking for players? more position #2 and #4 ?
+ggplot(data=vball, aes(x=country, fill=position_number)) + 
+  geom_bar(position = "dodge") + ggtitle("Player Position & their Height bwtn Countries") + 
+  xlab("Position Number") + ylab("Height") + labs(fill = "Country") + 
+  scale_x_discrete(na.translate = FALSE) + facet_wrap(~position_number)
